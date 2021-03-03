@@ -1,0 +1,102 @@
+<html>
+<body>
+    <div class="diagnosisForm">
+        <p>診断</p>
+        <p id="int__errmsg" style="color:red"></p>
+        <input type="number" id="weight" value="" placeholder="体重(kg)" required>
+        <input type="number" id="height" value="" placeholder="身長(cm)" required>
+        <button id="diagnosis">診断する</button>
+    </div>
+
+    <div class="aipSample">
+        <button id="apiBtn">取得する</button>
+    </div>
+</body>
+</html>
+
+
+<script>
+/* 診断
+*****************************************************************/
+/* BMI */
+let bmiFun = (weight, height) =>
+{
+    let kg = weight;
+    let m = height * 0.01;
+    let result = Math.round(kg / (m * m));
+    document.write("<p>" + 'BMI(肥満度)は<b>' + result + "</b>です。</p>");
+}
+
+/* 適正体重 */
+let appropriateWeightFun = (weight, height) =>
+{
+    let kg = weight;
+    let m = height * 0.01;
+    let result = Math.round(22 * (m * m));
+    let difference = result - weight;
+
+    let preNum = (n) => (n > 0) ? "+" + n : n;
+    let preDifference = preNum(difference);
+
+    document.write("<p>適正体重は、現在の体重から<b>" + preDifference + "kg</b>した<b>" + result + "kg</b>です。</p>");
+}
+
+
+document.getElementById('diagnosis').addEventListener('click', () =>
+{
+    let id_weight_val = document.getElementById('weight').value;
+    let id_height_val = document.getElementById('height').value;
+    let id_Err = document.getElementById('int__errmsg');
+
+    if (id_weight_val === "" || id_height_val === "")
+    {
+        id_Err.innerText = '全ての入力蘭を入力してください';
+    }
+    else
+    {
+        if (id_weight_val <= 0 || id_height_val <= 0)
+        {
+            id_Err.innerText = '体重と身長はプラスの値を入力してください';
+        }
+        else
+        {
+            bmiFun(id_weight_val, id_height_val);
+            appropriateWeightFun(id_weight_val, id_height_val);
+        }
+    }
+})
+
+/* API
+*****************************************************************/
+// apiFun   = データ取得用関数 
+// printFun = 描画用関数　(まとめてもいいが用途で分けた方が保守性いいかも)
+
+let apiFun = () => {
+    let requestURL = 'https://jsonplaceholder.typicode.com/users/1';
+    let request = new XMLHttpRequest();
+
+    request.open('GET', requestURL, true);
+    request.responseType = 'json';
+    request.send();
+
+    //レスポンス完了後の自動処理
+    request.onload = () =>
+    {
+        const data = request.response;
+        console.log(data);
+        console.log(data.id);
+        printFun(data);
+    }
+}
+
+let printFun = (data)=>{
+    document.write(data.email);
+}
+
+
+document.getElementById('apiBtn').addEventListener('click', () =>
+{
+    apiFun();
+})
+
+</script>
