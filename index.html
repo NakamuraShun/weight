@@ -66,37 +66,4 @@ document.getElementById('diagnosis').addEventListener('click', () =>
     }
 })
 
-/* API
-*****************************************************************/
-// apiFun   = データ取得用関数 
-// printFun = 描画用関数　(まとめてもいいが用途で分けた方が保守性いいかも)
-
-let apiFun = () => {
-    let requestURL = 'https://jsonplaceholder.typicode.com/users/1';
-    let request = new XMLHttpRequest();
-
-    request.open('GET', requestURL, true);
-    request.responseType = 'json';
-    request.send();
-
-    //レスポンス完了後の自動処理
-    request.onload = () =>
-    {
-        const data = request.response;
-        console.log(data);
-        console.log(data.id);
-        printFun(data);
-    }
-}
-
-let printFun = (data)=>{
-    document.write(data.email);
-}
-
-
-document.getElementById('apiBtn').addEventListener('click', () =>
-{
-    apiFun();
-})
-
 </script>
