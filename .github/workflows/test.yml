@@ -17,13 +17,15 @@ on:
 
 jobs:
   # ========================================================
-  #                          CI
+  # CI
   # ========================================================
   CI:
     runs-on: ubuntu-latest
     env:
       CI: true
+      IS_TARGET_SUBMIT_BRANCH: contains(fromJSON('["release", "education", "main"]'), github.base_ref)
     steps:
+      - run: echo $IS_TARGET_SUBMIT_BRANCH
       - name: 🙌 Checkout
         uses: actions/checkout@v4
 
@@ -46,7 +48,12 @@ jobs:
       #   run: make test
 
   # ========================================================
-  #                          CD
+  # CD
+  #
+  # 実行条件
+  # 1. CIジョブが成功していること
+  # 2. リポジトリのorganizationがnso-rntであること
+  # 3. プルリクエストがマージされていること
   # ========================================================
   CD:
     needs: CI
@@ -64,15 +71,15 @@ jobs:
 
       # - name: easコマンドのパラメータ用のENVCODEを定義
       #   run: |
-      #     if [ "${{ github.head_ref }}" == "develop" ]; then
+      #     if [ "${{ github.base_ref }}" == "develop" ]; then
       #       echo "ENVCODE=dev" >> $GITHUB_ENV
-      #     elif [ "${{ github.head_ref }}" == "qa" ]; then
+      #     elif [ "${{ github.base_ref }}" == "qa" ]; then
       #       echo "ENVCODE=qa" >> $GITHUB_ENV
-      #     elif [ "${{ github.head_ref }}" == "release" ]; then
+      #     elif [ "${{ github.base_ref }}" == "release" ]; then
       #       echo "ENVCODE=stg" >> $GITHUB_ENV
-      #     elif [ "${{ github.head_ref }}" == "education" ]; then
+      #     elif [ "${{ github.base_ref }}" == "education" ]; then
       #       echo "ENVCODE=edu" >> $GITHUB_ENV
-      #     elif [ "${{ github.head_ref }}" == "main" ]; then
+      #     elif [ "${{ github.base_ref }}" == "main" ]; then
       #       echo "ENVCODE=prd" >> $GITHUB_ENV
       #     else
       #       echo "Error: マージ先ブランチに対応するENVCODEを正しく設定が設定できませんでした。"
