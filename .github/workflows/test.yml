@@ -20,5 +20,5 @@ jobs:
       - name: env環境変数
         run: echo env.NEED_DEPLOY
       - name: trueの場合
-        run: echo "testtttt"
+        run: echo "testtttta"
         if: ${{ env.NEED_DEPLOY }}
