@@ -8,7 +8,7 @@ on:
 env:
   # NEED_DEPLOY: $GITHUB_REPOSITORY_OWNER == 'NakamuraShun'
   # NEED_DEPLOY: $GITHUB_REPOSITORY_OWNER == 'aaaa'
-  NEED_DEPLOY: ${{ $GITHUB_REPOSITORY_OWNER == 'aaaa' }}
+  NEED_DEPLOY: ${{ github.repository_owner == 'aaaa' }}
 
 jobs:
   test:
