@@ -23,6 +23,9 @@ jobs:
     env:
       CI: true
     steps:
+      - name: 実行テスト用
+        run: echo "CI"
+
       - name: 🙌 Checkout
         uses: actions/checkout@v4
 
@@ -54,6 +57,9 @@ jobs:
     env:
       CI: false
     steps:
+      - name: 実行テスト用
+        run: echo "CD"
+
       # - name: 🤖 Check for EXPO_TOKEN
       #   run: |
       #     if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
