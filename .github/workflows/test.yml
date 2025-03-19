@@ -6,14 +6,13 @@ on:
       - opened
       - synchronize
       - reopened
-      - closed # マージした際のCD実行のため
+      - closed # マージした時のCD実行用
     branches:
       - develop
       - qa
       - release
       - education
       - main
-      - master # テスト用
 
 jobs:
   # ---------------------------------------------------------------
@@ -58,7 +57,7 @@ jobs:
   # ---------------------------------------------------------------
   CD:
     needs: CI
-    if: (github.repository_owner == 'NakamuraShun') && (github.event.pull_request.merged == true)
+    if: (github.repository_owner == 'nso-rnt') && (github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
     env:
       CI: false
