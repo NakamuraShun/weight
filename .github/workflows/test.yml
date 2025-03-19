@@ -24,7 +24,7 @@ jobs:
           echo $NEED_DEPLOY2
       - name: trueの場合
         run: echo "testtttta"
-        if: ${{ env.NEED_DEPLOY == 'true' }}
+        if: ${{ env.NEED_DEPLOY != 'true' }}
       - name: falseの場合
         run: echo "testtttta"
-        if: ${{ env.NEED_DEPLOY2 == 'false' }}
+        if: ${{ env.NEED_DEPLOY2 != 'false' }}
