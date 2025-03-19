@@ -16,7 +16,7 @@ jobs:
 
   CD:
     needs: CI
-    if: (github.repository_owner == 'NakamuraShun') && (github.event.pull_request.merged == true)
+    if: (github.repository_owner == 'NakamuraShunaa') && (github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
     env:
       CI: false
