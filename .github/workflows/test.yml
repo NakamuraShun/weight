@@ -23,9 +23,16 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: true
-      IS_TARGET_SUBMIT_BRANCH: contains(fromJSON('["release", "education", "main"]'), github.base_ref)
+      IS_SUBMIT_TARGET_BRANCH: ${{ github.base_ref == 'release' || github.base_ref == 'education' || github.base_ref == 'main' }}
     steps:
-      - run: echo $IS_TARGET_SUBMIT_BRANCH
+      - name: 🤖 Check for サブミット判定OK
+        if: env.IS_SUBMIT_TARGET_BRANCH == true
+        run: echo ${{ env.IS_SUBMIT_TARGET_BRANCH }}
+
+      - name: 🤖 Check for サブミット判定NG
+        if: env.IS_SUBMIT_TARGET_BRANCH == true
+        run: echo ${{ env.IS_SUBMIT_TARGET_BRANCH }}
+
       - name: 🙌 Checkout
         uses: actions/checkout@v4
 
