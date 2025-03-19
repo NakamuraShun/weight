@@ -1,4 +1,4 @@
-name: 【CD/CD】
+name: CD/CD
 
 on:
   pull_request:
