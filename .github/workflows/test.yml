@@ -1,23 +1,26 @@
-name: test
+name: CD/CD
 
 on:
   pull_request:
     types: [opened, synchronize, reopened]
     branches: [master]
 
-env:
-  need_deploy: ${{ github.repository_owner == 'NakamuraShun' }}
-
 jobs:
-  test:
+  CI:
     runs-on: ubuntu-latest
+    env:
+      CI: true
     steps:
-      - name: デフォルト環境変数1
+      - name: デフォルト環境変数
         run: echo ${{ github.head_ref }}
+  CD:
+    needs: CI
+    runs-on: ubuntu-latest
+    env:
+      CI: false
+      NEED_DEPLOY: ${{ github.repository_owner == 'NakamuraShun' }}
+    # if: (NEED_DEPLOY == true) && (github.event.pull_request.merged == true)
+    if: NEED_DEPLOY == true
+    steps:
       - name: デフォルト環境変数2
-        run: echo ${{ github.repository_owner }}
-      - name: env環境変数
-        run: echo ${{ env.need_deploy }}
-      - name: trueの場合
-        run: echo "testtttta"
-        if: env.need_deploy == 'true'
+        run: echo ${{ github.head_ref }}
