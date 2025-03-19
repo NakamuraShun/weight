@@ -11,15 +11,33 @@ jobs:
     env:
       CI: true
     steps:
-      - name: デフォルト環境変数1
+      - name: 作業ブランチ名
         run: echo ${{ github.head_ref }}
 
   CD:
     needs: CI
-    if: (github.repository_owner == 'NakamuraShun') && (github.event.pull_request.merged == true)
+    if: (github.repository_owner == "NakamuraShun") && (github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
     env:
       CI: false
     steps:
-      - name: デフォルト環境変数2
-        run: echo ${{ github.head_ref }}
+      - name: マージ先ブランチ名
+        run: echo ${{ github.base_ref }}
+      - name: マージ先のブランチ名に対応するENVCODEを定義
+        run: |
+          if [ "${{ github.base_ref }}" == "develop" ]; then
+            "ENVCODE=dev" >> $GITHUB_ENV
+          elif [ "${{ github.base_ref }}" == "qa" ]; then
+            "ENVCODE=qa" >> $GITHUB_ENV
+          elif [ "${{ github.base_ref }}" == "release" ]; then
+            "ENVCODE=stg" >> $GITHUB_ENV
+          elif [ "${{ github.base_ref }}" == "education" ]; then
+            "ENVCODE=edu" >> $GITHUB_ENV
+          elif [ "${{ github.base_ref }}" == "main" ]; then
+            "ENVCODE=prd" >> $GITHUB_ENV
+          else
+            "ENVCODE=unknown" >> $GITHUB_ENV
+          fi
+          echo $ENV
+      - name: ビルド
+        run: echo "The environment is $ENV"
