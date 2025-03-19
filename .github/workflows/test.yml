@@ -6,25 +6,18 @@ on:
     branches: [master]
 
 env:
-  # NEED_DEPLOY: $GITHUB_REPOSITORY_OWNER == 'NakamuraShun'
   NEED_DEPLOY: ${{ github.repository_owner == 'NakamuraShun' }}
-  NEED_DEPLOY2: ${{ github.repository_owner == 'aaaa' }}
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - name: デフォルト環境変数1
-        run: echo $GITHUB_HEAD_REF
+        run: echo github.head_ref
       - name: デフォルト環境変数2
-        run: echo $GITHUB_REPOSITORY_OWNER
+        run: echo github.repository_owner
       - name: env環境変数
-        run: |
-          echo $NEED_DEPLOY
-          echo $NEED_DEPLOY2
+        run: echo env.NEED_DEPLOY
       - name: trueの場合
         run: echo "testtttta"
         if: ${{ env.NEED_DEPLOY != 'true' }}
-      - name: falseの場合
-        run: echo "testtttta"
-        if: ${{ env.NEED_DEPLOY2 != 'false' }}
