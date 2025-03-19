@@ -16,11 +16,10 @@ jobs:
   CD:
     needs: CI
     runs-on: ubuntu-latest
+    if: github.repository_owner == 'NakamuraShun'
+    # if: (NEED_DEPLOY == true) && (github.event.pull_request.merged == true)
     env:
       CI: false
-      NEED_DEPLOY: ${{ github.repository_owner == 'NakamuraShun' }}
-    # if: (NEED_DEPLOY == true) && (github.event.pull_request.merged == true)
-    if: env.NEED_DEPLOY == true
     steps:
       - name: デフォルト環境変数2
         run: echo ${{ github.head_ref }}
