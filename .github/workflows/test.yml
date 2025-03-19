@@ -13,7 +13,7 @@ jobs:
     env:
       CI: true
     steps:
-      - name: デフォルト環境変数
+      - name: デフォルト環境変数1
         run: echo ${{ github.head_ref }}
 
   CD:
