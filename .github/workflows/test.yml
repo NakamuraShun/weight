@@ -2,42 +2,116 @@ name: CD/CD
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened, closed]
-    branches: [master]
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - closed # マージした時のCD実行用
+    branches:
+      - develop
+      - qa
+      - release
+      - education
+      - main
 
 jobs:
+  # ---------------------------------------------------------------
+  # CI
+  # ---------------------------------------------------------------
   CI:
     runs-on: ubuntu-latest
     env:
       CI: true
     steps:
-      - name: 作業ブランチ名
-        run: echo ${{ github.head_ref }}
+      - name: 🙌 Checkout
+        uses: actions/checkout@v4
 
+      - name: 🥟 Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      # - name: ⬇️ Install Dependencies
+      #   run: bun install --no-save
+
+      # - name: 🔎 Lint Check
+      #   run: make lint
+
+      # - name: 🔎 Type Check
+      #   run: make tsc
+
+      # - name: 🔎 Expo Doctor
+      #   run: make expo-doctor
+
+      # - name: 🔎 Test
+      #   run: make test
+
+  # ---------------------------------------------------------------
+  # CD
+  #
+  # ジョブの実行条件
+  # - CIジョブが成功していること
+  # - リポジトリのorganizationがnso-rntであること
+  # - プルリクエストがマージされていること
+  #
+  # submitまでする条件
+  # - マージ先がrelease, education, mainのいずれかであること
+  # ---------------------------------------------------------------
   CD:
     needs: CI
-    if: (github.repository_owner == 'NakamuraShun') && (github.event.pull_request.merged == true)
+    if: (github.repository_owner == 'nso-rnt') && (github.event.pull_request.merged == true)
     runs-on: ubuntu-latest
     env:
       CI: false
+      ALLOW_SUBMIT: ${{ github.base_ref == 'release' || github.base_ref == 'education' || github.base_ref == 'main' }}
     steps:
-      - name: マージ先ブランチ名
-        run: echo ${{ github.base_ref }}
-      - name: マージ先のブランチ名に対応するENVCODEを定義
-        run: |
-          if [ "${{ github.head_ref }}" == "develop" ]; then
-            echo "ENVCODE=dev" >> $GITHUB_ENV
-          elif [ "${{ github.head_ref }}" == "qa" ]; then
-            echo "ENVCODE=qa" >> $GITHUB_ENV
-          elif [ "${{ github.head_ref }}" == "release" ]; then
-            echo "ENVCODE=stg" >> $GITHUB_ENV
-          elif [ "${{ github.head_ref }}" == "education" ]; then
-            echo "ENVCODE=edu" >> $GITHUB_ENV
-          elif [ "${{ github.head_ref }}" == "main" ]; then
-            echo "ENVCODE=prd" >> $GITHUB_ENV
-          else
-            echo "正しくENVCODEが設定できませんでした。"
-            exit 1 # 終了させる
-          fi
-      - name: ビルド
-        run: echo "The environment is $ENVCODE"
+      # - name: 🤖 Check for EXPO_TOKEN
+      #   run: |
+      #     if [ -z "${{ secrets.EXPO_TOKEN }}" ]; then
+      #       echo "You must provide an EXPO_TOKEN secret linked to this project's Expo account in this repo's secrets. Learn more: https://docs.expo.dev/eas-update/github-actions"
+      #       exit 1
+      #     fi
+
+      # - name: ✒️ Define ENVCODE for eas command parameters
+      #   run: |
+      #     if [ "${{ github.base_ref }}" == "develop" ]; then
+      #       echo "ENVCODE=dev" >> $GITHUB_ENV
+      #     elif [ "${{ github.base_ref }}" == "qa" ]; then
+      #       echo "ENVCODE=qa" >> $GITHUB_ENV
+      #     elif [ "${{ github.base_ref }}" == "release" ]; then
+      #       echo "ENVCODE=stg" >> $GITHUB_ENV
+      #     elif [ "${{ github.base_ref }}" == "education" ]; then
+      #       echo "ENVCODE=edu" >> $GITHUB_ENV
+      #     elif [ "${{ github.base_ref }}" == "main" ]; then
+      #       echo "ENVCODE=prd" >> $GITHUB_ENV
+      #     else
+      #       echo "Error: ENVCODEを設定できませんでした。"
+      #       exit 1
+      #     fi
+
+      - name: 🙌 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🥟 Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      # - name: 🏗 Setup EAS
+      #   uses: expo/expo-github-action@v8
+      #   with:
+      #     eas-version: latest
+      #     token: ${{ secrets.EXPO_TOKEN }}
+
+      # - name: ⬇️ Install Dependencies
+      #   run: bun install --no-save
+
+      # - name: 🤖 EAS Build for Taihei app
+      #   run: make build PROFILE=$ENVCODE IS_DEVICE_REGISTER=false
+
+      # - name: 🤖 EAS Build for Nishio app
+      #   run: make build PROFILE=$ENVCODE-n IS_DEVICE_REGISTER=false
+
+      # - name: 🍎 EAS Submit for Taihei app
+      #   if: env.ALLOW_SUBMIT == 'true'
+      #   run: make submit SUBMIT_PROFILE=$ENVCODE
+
+      # - name: 🍎 EAS Submit for Nishio app
+      #   if: env.ALLOW_SUBMIT == 'true'
+      #   run: make submit SUBMIT_PROFILE=$ENVCODE-n
