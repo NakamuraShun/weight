@@ -7,8 +7,8 @@ on:
 
 env:
   # NEED_DEPLOY: $GITHUB_REPOSITORY_OWNER == 'NakamuraShun'
-  # NEED_DEPLOY: $GITHUB_REPOSITORY_OWNER == 'aaaa'
-  NEED_DEPLOY: ${{ github.repository_owner == 'aaaa' }}
+  NEED_DEPLOY: ${{ github.repository_owner == 'NakamuraShun' }}
+  NEED_DEPLOY2: ${{ github.repository_owner == 'aaaa' }}
 
 jobs:
   test:
@@ -20,6 +20,10 @@ jobs:
         run: echo $GITHUB_REPOSITORY_OWNER
       - name: env環境変数
         run: echo $NEED_DEPLOY
+        run: echo $NEED_DEPLOY2
       - name: trueの場合
         run: echo "testtttta"
-        if: ${{ env.NEED_DEPLOY }}
+        if: ${{ env.NEED_DEPLOY == 'true' }}
+      - name: falseの場合
+        run: echo "testtttta"
+        if: ${{ env.NEED_DEPLOY2 == 'false' }}
