@@ -2,7 +2,7 @@ name: CD/CD
 
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, closed]
     branches: [master]
 
 jobs:
@@ -16,9 +16,9 @@ jobs:
 
   CD:
     needs: CI
-    runs-on: ubuntu-latest
     # if: (github.repository_owner == 'NakamuraShun') && (github.event.pull_request.merged == true)
     if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
     env:
       CI: false
     steps:
