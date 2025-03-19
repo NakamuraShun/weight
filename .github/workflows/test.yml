@@ -23,16 +23,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: true
-      IS_SUBMIT_TARGET_BRANCH: ${{ github.base_ref == 'release' || github.base_ref == 'education' || github.base_ref == 'main' }}
+      ALLOW_SUBMIT: ${{ github.base_ref == 'release' || github.base_ref == 'education' || github.base_ref == 'main' }}
     steps:
-      - name: 🤖 Check for サブミット判定OK
-        if: env.IS_SUBMIT_TARGET_BRANCH
-        run: echo ${{ env.IS_SUBMIT_TARGET_BRANCH }}
-
-      - name: 🤖 Check for サブミット判定NG
-        if: env.IS_SUBMIT_TARGET_BRANCH
-        run: echo ${{ env.IS_SUBMIT_TARGET_BRANCH }}
-
       - name: 🙌 Checkout
         uses: actions/checkout@v4
 
@@ -68,7 +60,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: false
-      IS_SUBMIT_TARGET_BRANCH: ${{ github.base_ref == 'release' || github.base_ref == 'education' || github.base_ref == 'main' }}
+      ALLOW_SUBMIT: ${{ github.base_ref == 'release' || github.base_ref == 'education' || github.base_ref == 'main' }}
     steps:
       # - name: 🤖 Check for EXPO_TOKEN
       #   run: |
@@ -77,7 +69,7 @@ jobs:
       #       exit 1
       #     fi
 
-      # - name: easコマンドのパラメータ用のENVCODEを定義
+      # - name: ✒️ Define ENVCODE for eas command parameters
       #   run: |
       #     if [ "${{ github.base_ref }}" == "develop" ]; then
       #       echo "ENVCODE=dev" >> $GITHUB_ENV
@@ -90,7 +82,7 @@ jobs:
       #     elif [ "${{ github.base_ref }}" == "main" ]; then
       #       echo "ENVCODE=prd" >> $GITHUB_ENV
       #     else
-      #       echo "Error: マージ先ブランチに対応するENVCODEを正しく設定が設定できませんでした。"
+      #       echo "Error: ENVCODEを設定できませんでした。"
       #       exit 1
       #     fi
 
@@ -116,9 +108,9 @@ jobs:
       #   run: make build PROFILE=$ENVCODE-n IS_DEVICE_REGISTER=false
 
       # - name: 🍎 EAS Submit for Taihei app
-      #   if: env.IS_SUBMIT_TARGET_BRANCH == 'true'
+      #   if: env.ALLOW_SUBMIT == 'true'
       #   run: make submit SUBMIT_PROFILE=$ENVCODE
 
       # - name: 🍎 EAS Submit for Nishio app
-      #   if: env.IS_SUBMIT_TARGET_BRANCH == 'true'
+      #   if: env.ALLOW_SUBMIT == 'true'
       #   run: make submit SUBMIT_PROFILE=$ENVCODE-n
