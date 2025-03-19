@@ -23,7 +23,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: true
-      ALLOW_SUBMIT: ${{ github.base_ref == 'release' || github.base_ref == 'education' || github.base_ref == 'main' }}
     steps:
       - name: 🙌 Checkout
         uses: actions/checkout@v4
