@@ -26,11 +26,11 @@ jobs:
       IS_SUBMIT_TARGET_BRANCH: ${{ github.base_ref == 'release' || github.base_ref == 'education' || github.base_ref == 'main' }}
     steps:
       - name: 🤖 Check for サブミット判定OK
-        if: env.IS_SUBMIT_TARGET_BRANCH == 'true'
+        if: env.IS_SUBMIT_TARGET_BRANCH
         run: echo ${{ env.IS_SUBMIT_TARGET_BRANCH }}
 
       - name: 🤖 Check for サブミット判定NG
-        if: env.IS_SUBMIT_TARGET_BRANCH == 'false'
+        if: env.IS_SUBMIT_TARGET_BRANCH
         run: echo ${{ env.IS_SUBMIT_TARGET_BRANCH }}
 
       - name: 🙌 Checkout
@@ -68,6 +68,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CI: false
+      IS_SUBMIT_TARGET_BRANCH: ${{ github.base_ref == 'release' || github.base_ref == 'education' || github.base_ref == 'main' }}
     steps:
       # - name: 🤖 Check for EXPO_TOKEN
       #   run: |
@@ -115,7 +116,9 @@ jobs:
       #   run: make build PROFILE=$ENVCODE-n IS_DEVICE_REGISTER=false
 
       # - name: 🍎 EAS Submit for Taihei app
+      #   if: env.IS_SUBMIT_TARGET_BRANCH == 'true'
       #   run: make submit SUBMIT_PROFILE=$ENVCODE
 
       # - name: 🍎 EAS Submit for Nishio app
+      #   if: env.IS_SUBMIT_TARGET_BRANCH == 'true'
       #   run: make submit SUBMIT_PROFILE=$ENVCODE-n
