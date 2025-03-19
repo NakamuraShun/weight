@@ -19,8 +19,9 @@ jobs:
       - name: デフォルト環境変数2
         run: echo $GITHUB_REPOSITORY_OWNER
       - name: env環境変数
-        run: echo $NEED_DEPLOY
-        run: echo $NEED_DEPLOY2
+        run: |
+          echo $NEED_DEPLOY
+          echo $NEED_DEPLOY2
       - name: trueの場合
         run: echo "testtttta"
         if: ${{ env.NEED_DEPLOY == 'true' }}
