@@ -13,11 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: デフォルト環境変数1
-        run: echo github.head_ref
+        run: echo ${{ github.head_ref }}
       - name: デフォルト環境変数2
-        run: echo github.repository_owner
+        run: echo ${{ github.repository_owner }}
       - name: env環境変数
-        run: echo env.NEED_DEPLOY
+        run: echo ${{ env.NEED_DEPLOY }}
       - name: trueの場合
         run: echo "testtttta"
         if: ${{ env.NEED_DEPLOY != 'true' }}
