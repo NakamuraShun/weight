@@ -38,6 +38,6 @@ jobs:
           else
             "ENVCODE=unknown" >> $GITHUB_ENV
           fi
-          echo $ENV
+          echo $ENVCODE
       - name: ビルド
-        run: echo "The environment is $ENV"
+        run: echo "The environment is $ENVCODE"
