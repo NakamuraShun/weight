@@ -36,8 +36,8 @@ jobs:
           elif [ "${{ github.head_ref }}" == "main" ]; then
             echo "ENVCODE=prd" >> $GITHUB_ENV
           else
-            echo "ENVCODE=unknown" >> $GITHUB_ENV
+            echo "正しくENVCODEが設定できませんでした。"
+            exit 1 # 終了させる
           fi
-          echo $ENVCODE
       - name: ビルド
         run: echo "The environment is $ENVCODE"
