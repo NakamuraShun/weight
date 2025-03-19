@@ -1,24 +1,25 @@
-name: test
+name: CD/CD
 
 on:
   pull_request:
     types: [opened, synchronize, reopened]
     branches: [master]
 
-env:
-  # NEED_DEPLOY: $GITHUB_REPOSITORY_OWNER == 'NakamuraShun'
-  NEED_DEPLOY: $GITHUB_REPOSITORY_OWNER == 'aaaa'
-
 jobs:
-  test:
+  CI:
     runs-on: ubuntu-latest
+    env:
+      CI: true
     steps:
       - name: デフォルト環境変数
-        run: echo $GITHUB_HEAD_REF
-      - name: デフォルト環境変数
-        run: echo $GITHUB_REPOSITORY_OWNER
-      - name: env環境変数
-        run: echo env.NEED_DEPLOY
-      - name: trueの場合
-        run: echo "testtttt"
-        if: ${{ env.NEED_DEPLOY }}
+        run: echo ${{ github.head_ref }}
+
+  CD:
+    needs: CI
+    runs-on: ubuntu-latest
+    if: (github.repository_owner == 'NakamuraShun') && (github.event.pull_request.merged == true)
+    env:
+      CI: false
+    steps:
+      - name: デフォルト環境変数2
+        run: echo ${{ github.head_ref }}
