@@ -26,11 +26,11 @@ jobs:
       IS_SUBMIT_TARGET_BRANCH: ${{ github.base_ref == 'release' || github.base_ref == 'education' || github.base_ref == 'main' }}
     steps:
       - name: 🤖 Check for サブミット判定OK
-        if: env.IS_SUBMIT_TARGET_BRANCH == true
+        if: env.IS_SUBMIT_TARGET_BRANCH == 'true'
         run: echo ${{ env.IS_SUBMIT_TARGET_BRANCH }}
 
       - name: 🤖 Check for サブミット判定NG
-        if: env.IS_SUBMIT_TARGET_BRANCH == true
+        if: env.IS_SUBMIT_TARGET_BRANCH == 'false'
         run: echo ${{ env.IS_SUBMIT_TARGET_BRANCH }}
 
       - name: 🙌 Checkout
