@@ -20,4 +20,4 @@ jobs:
         run: echo ${{ env.need_deploy }}
       - name: trueの場合
         run: echo "testtttta"
-        if: ${{ env.NEED_DEPLOY != 'true' }}
+        if: env.need_deploy == 'true'
