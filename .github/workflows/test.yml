@@ -4,6 +4,8 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
     branches: [master]
+  push:
+    branches: [master]
 
 jobs:
   CI:
@@ -11,7 +13,7 @@ jobs:
     env:
       CI: true
     steps:
-      - name: デフォルト環境変数
+      - name: デフォルト環境変数1
         run: echo ${{ github.head_ref }}
 
   CD:
